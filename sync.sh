@@ -20,12 +20,10 @@ do
     GOSUM+=$(cat $SCRIPT_DIR/${item}go.sum)
     GOSUM+="
 "
+    cd $SCRIPT_DIR/$item; git pull
     mv $SCRIPT_DIR/${item}go.mod $SCRIPT_DIR/${item}go.mod_last || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}go.sum $SCRIPT_DIR/${item}go.sum_last || echo "" > /dev/null
-    mv $SCRIPT_DIR/${item}vendor $TEMP_DIR/vendor || echo "" > /dev/null
-    cd $SCRIPT_DIR/$item; git pull
     mv $SCRIPT_DIR/${item}.git $SCRIPT_DIR/${item}.git_last || echo "" > /dev/null
-    cd $SCRIPT_DIR/$item; go mod vendor -o ../vendor_${item%"/"}
 done
 
 touch $SCRIPT_DIR/go.mod
@@ -46,7 +44,6 @@ do
 
     mv $SCRIPT_DIR/${item}go.mod_last $SCRIPT_DIR/${item}go.mod || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}go.sum_last $SCRIPT_DIR/${item}go.sum || echo "" > /dev/null
-    mv $SCRIPT_DIR/${item}.git_last $SCRIPT_DIR/${item}.git || echo "" > /dev/null
     mv $TEMP_DIR/vendor $SCRIPT_DIR/${item}vendor  || echo "" > /dev/null
 done
 
@@ -54,3 +51,13 @@ cd $SCRIPT_DIR
 git add -A .
 git commit -m "step $(date +%s)"
 git push -u origin main
+
+for item in ${DIRECTORIES[@]}
+do
+    if [[ $item == "vendor/" ]]; then
+      continue
+    fi
+    
+    mv $SCRIPT_DIR/${item}.git_last $SCRIPT_DIR/${item}.git || echo "" > /dev/null
+done
+
