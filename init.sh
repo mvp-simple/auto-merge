@@ -3,13 +3,12 @@ git init
 git remote add origin git@github.com:mvp-simple/auto-merge.git
 git branch -M main
 
-GIT_REPOSITORIES=(
-    https://github.com/rinatusmanov/dauni-ml.git 
-    https://github.com/rinatusmanov/evgeniya.git 
-    https://github.com/rinatusmanov/compiler_go_ibm_db.git
-)
+REPO=$(cat init.repo.json)
+KEYS=$(echo $REPO | jq '. | keys[]')
 
-for item in ${GIT_REPOSITORIES[@]}
+for key in ${KEYS[@]}
 do
-    git clone $item
+    SRC=$(echo $REPO | jq -r ".${key}")
+    FOLDER=$(echo $key | jq -r ".")
+    git clone $SRC $FOLDER
 done
