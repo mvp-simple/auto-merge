@@ -13,3 +13,4 @@ done
 cd $SCRIPT_DIR
 git add .
 git commit -m "step $(date +%s)"
+git push
