@@ -1,0 +1,9 @@
+{
+    "git": {
+        "remote": "git@github.com:mvp-simple/auto-merge-result.git"
+    },
+    "repositories": {
+        "dauni-ml": "https://github.com/rinatusmanov/dauni-ml.git",
+        "jsonrpc20": "https://github.com/rinatusmanov/evgeniya.git"
+    }
+}

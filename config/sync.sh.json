@@ -1,0 +1,3 @@
+{
+    "sed_replace_at_files_regexp": "s/github.com\/rinatusmanov/github.com\/mvp-simple\/auto-merge/g"
+}
