@@ -23,9 +23,9 @@ do
     mv $SCRIPT_DIR/${item}go.mod $SCRIPT_DIR/${item}go.mod_last || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}go.sum $SCRIPT_DIR/${item}go.sum_last || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}vendor $TEMP_DIR/vendor || echo "" > /dev/null
-    # cd $SCRIPT_DIR/$item; git pull
-    # mv $SCRIPT_DIR/${item}.git $SCRIPT_DIR/${item}.git_last || echo "" > /dev/null
-    # cd $SCRIPT_DIR/$item; go mod vendor -o ../vendor_${item%"/"}
+    cd $SCRIPT_DIR/$item; git pull
+    mv $SCRIPT_DIR/${item}.git $SCRIPT_DIR/${item}.git_last || echo "" > /dev/null
+    cd $SCRIPT_DIR/$item; go mod vendor -o ../vendor_${item%"/"}
 done
 
 touch $SCRIPT_DIR/go.mod
