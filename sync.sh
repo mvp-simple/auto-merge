@@ -32,10 +32,9 @@ touch $SCRIPT_DIR/go.sum
 echo "$GOMOD" > $SCRIPT_DIR/go.mod
 echo "$GOSUM" > $SCRIPT_DIR/go.sum
 
-echo ${DIRECTORIES[@]}
-
 go mod tidy
 go mod vendor
+
 for item in ${DIRECTORIES[@]}
 do
     if [[ $item == "vendor/" ]]; then
