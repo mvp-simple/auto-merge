@@ -11,6 +11,8 @@ do
     cd $SCRIPT_DIR/$item; git pull
     mv $SCRIPT_DIR/${item}vendor $SCRIPT_DIR/${item}vendor_last || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}.git $SCRIPT_DIR/${item}.git_last || echo "" > /dev/null
+    echo go mod vendor -o ../vendor${item:0:-1}
+    exit
     cd $SCRIPT_DIR/$item; go mod vendor -o ../vendor${item:0:-1}
     mv $SCRIPT_DIR/${item}vendor_last $SCRIPT_DIR/${item}vendor  || echo "" > /dev/null
 done
