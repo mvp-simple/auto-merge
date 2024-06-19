@@ -1,0 +1,4 @@
+# github.com/ibmdb/go_ibm_db v0.4.1
+## explicit
+github.com/ibmdb/go_ibm_db
+github.com/ibmdb/go_ibm_db/api
