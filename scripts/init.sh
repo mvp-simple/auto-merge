@@ -7,11 +7,11 @@ CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 SCRIPT_NAME=init.sh
 
-# make work folder
-mkdir $WORK_DIR || echo "" > /dev/null
-
 # read configuration
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
+
+# make work folder
+mkdir $WORK_DIR || echo "" > /dev/null
 
 # initialization git remote
 cd $WORK_DIR
@@ -21,8 +21,7 @@ git init
 git remote add origin ${GIT_REMOTE}
 git branch -M main
 
-
-
+# download all source repositories
 REPOSITORIES_FOLDERS=$(echo $CONFIG | jq '.repositories | keys[]')
 for FOLDER in ${REPOSITORIES_FOLDERS[@]}
 do

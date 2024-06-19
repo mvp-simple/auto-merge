@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# initialization
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+WORK_DIR=$SCRIPT_DIR/../result
+CONFIG_DIR=$SCRIPT_DIR/../config
+SCRIPTS_DIR=$SCRIPT_DIR/../scripts
+SCRIPT_NAME=sync.sh
+
+# read configuration
+CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
+
+# prepare go.mod and go.sum files
+$SCRIPT_DIR/go.mod.sum.sh
 # SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
 # GOMOD="module github.com/rinatusmanov
@@ -47,22 +60,22 @@
 
 # cd $SCRIPT_DIR
 
-REPO=$(cat sync.config.json)
-SED_REPLACE_AT_FILES_REGEXP=$(echo $REPO | jq -r '.sed_replace_at_files_regexp')
-SED_REPLACE_AT_FILES_REGEXP="'${SED_REPLACE_AT_FILES_REGEXP}'"
-echo $SED_REPLACE_AT_FILES_REGEXP
-if [ -n $SED_REPLACE_AT_FILES_REGEXP ]; then
-  echo $SED_REPLACE_AT_FILES_REGEXP
-  FILES=$(find .)
-  for file in ${FILES[@]}
-  do
-      if [[ -d $file ]]; then
-          continue
-      fi
-      sed -i '' $SED_REPLACE_AT_FILES_REGEXP $file
-      break
-  done
-fi
+# REPO=$(cat sync.config.json)
+# SED_REPLACE_AT_FILES_REGEXP=$(echo $REPO | jq -r '.sed_replace_at_files_regexp')
+# SED_REPLACE_AT_FILES_REGEXP="'${SED_REPLACE_AT_FILES_REGEXP}'"
+# echo $SED_REPLACE_AT_FILES_REGEXP
+# if [ -n $SED_REPLACE_AT_FILES_REGEXP ]; then
+#   echo $SED_REPLACE_AT_FILES_REGEXP
+#   FILES=$(find .)
+#   for file in ${FILES[@]}
+#   do
+#       if [[ -d $file ]]; then
+#           continue
+#       fi
+#       sed -i '' $SED_REPLACE_AT_FILES_REGEXP $file
+#       break
+#   done
+# fi
 
 # git add -A .
 # git commit -m "step $(date +%s)"
