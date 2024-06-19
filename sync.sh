@@ -46,6 +46,7 @@ do
 
     mv $SCRIPT_DIR/${item}go.mod_last $SCRIPT_DIR/${item}go.mod || echo "" > /dev/null
     mv $SCRIPT_DIR/${item}go.sum_last $SCRIPT_DIR/${item}go.sum || echo "" > /dev/null
+    mv $SCRIPT_DIR/${item}.git_last $SCRIPT_DIR/${item}.git || echo "" > /dev/null
     mv $TEMP_DIR/vendor $SCRIPT_DIR/${item}vendor  || echo "" > /dev/null
 done
 
