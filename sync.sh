@@ -8,7 +8,7 @@ do
       continue
     fi
     
-    echo ${item[0:-1]}
+    echo ${item%"/"}
     exit 1
     cd $SCRIPT_DIR/$item; git pull
     mv $SCRIPT_DIR/${item}vendor $SCRIPT_DIR/${item}vendor_last || echo "" > /dev/null
