@@ -6,6 +6,7 @@ git branch -M main
 GIT_REPOSITORIES=(
     https://github.com/rinatusmanov/dauni-ml.git 
     https://github.com/rinatusmanov/evgeniya.git 
+    https://github.com/rinatusmanov/compiler_go_ibm_db.git
 )
 
 for item in ${GIT_REPOSITORIES[@]}
