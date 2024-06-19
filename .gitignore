@@ -1,4 +1,5 @@
 .idea
-**/.git
-**/vendor
-**/.gitignore
+*/.git
+*/vendor
+*/.gitignore
+*/.git_last
