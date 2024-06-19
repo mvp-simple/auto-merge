@@ -15,6 +15,6 @@ do
 done
 
 cd $SCRIPT_DIR
-git add .
+git add -A .
 git commit -m "step $(date +%s)"
 git push -u origin main
