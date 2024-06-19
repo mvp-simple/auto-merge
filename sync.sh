@@ -34,7 +34,6 @@ echo "$GOSUM" > $SCRIPT_DIR/go.sum
 
 go mod tidy
 go mod vendor
-
 for item in ${DIRECTORIES[@]}
 do
     if [[ $item == "vendor/" ]]; then
