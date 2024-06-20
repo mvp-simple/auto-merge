@@ -22,10 +22,11 @@ VENDOR_CREATE_AFTER__="_${ACTION_VENDOR_CREATE}_after_"
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
 REPOSITORIES=$(echo $CONFIG | jq -r '.repositories[]')
 for REPOSITORY in ${REPOSITORIES[@]}; do
+  mv "${SCRIPT_DIR}/../result/${REPOSITORY}/.git_last" "${SCRIPT_DIR}/../result/${REPOSITORY}/.git" || echo "" > /dev/null
   cd "${SCRIPT_DIR}/../result/${REPOSITORY}"; git clean -fdx && git reset --hard; git pull;
-  mv "${SCRIPT_DIR}/../result/${REPOSITORY}/".git "${SCRIPT_DIR}/../result/${REPOSITORY}/".git_last || echo "" > /dev/null
+  mv "${SCRIPT_DIR}/../result/${REPOSITORY}/.git" "${SCRIPT_DIR}/../result/${REPOSITORY}/.git_last" || echo "" > /dev/null
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
+
 # end clean and pull watched repositories
 
 
@@ -37,9 +38,11 @@ ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_CREATE_AFTER
 
 
 rm "${SCRIPT_DIR}/../result/.gitignore" || echo "" > /dev/null
-copy "${SCRIPT_DIR}/../scripts/files/.gitignore_result" "${SCRIPT_DIR}/../scripts/files/.gitignore"
-cd $SCRIPT_DIR/../result; git add -A .; git commit -m "step $(date +%s)"; git push -u origin main;
-
+copy "${SCRIPT_DIR}/../scripts/files/git/.gitignore_result" "${SCRIPT_DIR}/../result/.gitignore"
+cd "${SCRIPT_DIR}/../result"; git add -A .; git commit -m "step $(date +%s)"; git push -u origin main --force;
+for REPOSITORY in ${REPOSITORIES[@]}; do
+  mv "${SCRIPT_DIR}/../result/${REPOSITORY}/.git_last" "${SCRIPT_DIR}/../result/${REPOSITORY}/.git" || echo "" > /dev/null
+done
 
 # DIRECTORIES=$(ls -d */)
 # for item in ${DIRECTORIES[@]}
