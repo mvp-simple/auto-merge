@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# get 2 arguments 
+# -e|--executor script name who want run that hook
+# -a|--action hook name
+
+# and find hooks sorted by name at scripts/hooks directory as names 
+#     $script/$action* and run thats
+
+
 # initialization
 SCRIPT_DIR=$(dirname "$0")
 SCRIPT_NAME=$(basename "$0")
@@ -19,6 +27,9 @@ while [[ "$#" -gt 0 ]]
     shift
 done
 
-echo $EXECUTOR
-
-echo $ACTION
+HOOKS=$(find ${SCRIPT_DIR}/../scripts/hooks/${EXECUTOR} -name "$ACTION*")
+for HOOK in ${HOOKS[@]}
+do
+    chmod 0777 "${HOOK}"
+    "${HOOK}"
+done

@@ -1,27 +1,4 @@
 #!/bin/bash
-# hooks lifecycle
-# 1   GOMOD_HOOK_BEFORE_PREPARE   -   run before scan all go.mod sub folders at result folder
-# 2   GOMOD_HOOK_AFTER_PREPARED   -   run after scan all go.mod sub folders at result folder
-# 3   GOSUM_HOOK_BEFORE_PREPARE   -   run before scan all go.sum sub folders at result folder
-# 4   GOSUM_HOOK_AFTER_PREPARED   -   run after scan all go.sum sub folders at result folder
-# 5   VENDOR_HOOK_BEFORE_REPLACE  -   run before replace all folders named as vendor at result folder
-# 6   VENDOR_HOOK_AFTER_REPLACE_  -   run after replace all folders named as vendor at result folder
-# 7   GOMOD_HOOK_BEFORE_RENAME_   -   run before renames all go.mod sub folders at result folder
-# 8   GOMOD_HOOK_AFTER_RENAME__   -   run after renames all go.mod sub folders at result folder
-# 9   GOSUM_HOOK_BEFORE_RENAME_   -   run before renames all go.sum sub folders at result folder
-# 10  GOSUM_HOOK_AFTER_RENAME__   -   run after renames all go.sum sub folders at result folder
-# ---- here generate vendor folder
-# 11  GOMOD_HOOK_BEFORE_DELETE_   -   run before delete go.mod generated at 2 step
-# 12  GOMOD_HOOK_AFTER_DELETE__   -   run after delete go.mod generated at 2 step
-# 13  GOSUM_HOOK_BEFORE_DELETE_   -   run before delete go.sum generated at 4 step
-# 14  GOSUM_HOOK_AFTER_DELETE__   -   run after delete go.sum generated at 4 step
-# 15  GOSUM_HOOK_BEFORE_RESTORE   -   run before restore filename renamed at 10 step
-# 16  GOSUM_HOOK_AFTER_RESTORE_   -   run after restore filename renamed at 10 step
-# 17  GOMOD_HOOK_BEFORE_RESTORE   -   run before restore filename renamed at 8 step
-# 18  GOMOD_HOOK_AFTER_RESTORE_   -   run after restore filename renamed at 8 step
-# 19  VENDOR_HOOK_BEFORE_RESTORE  -   run before replace all vendor folders at 6 step
-# 20  VENDOR_HOOK_AFTER_RESTORE_  -   run after replace all vendor folders at 6 step
-
 # initialization
 SCRIPT_DIR=$(dirname "$0")
 SCRIPT_NAME=$(basename "$0")
@@ -66,6 +43,39 @@ VENDOR_HOOK_AFTER_REPLACE_="_${ACTION_VENDOR}_after_replace_"
 
 VENDOR_HOOK_BEFORE_RESTORE="_${ACTION_VENDOR}_before_restore"
 VENDOR_HOOK_AFTER_RESTORE_="_${ACTION_VENDOR}_after_restore_"
+
+
+help="
+# 1   ${GOMOD_HOOK_BEFORE_PREPARE}   -   run before scan all go.mod sub folders at result folder
+# 2   ${GOMOD_HOOK_AFTER_PREPARED}   -   run after scan all go.mod sub folders at result folder
+# 3   ${GOSUM_HOOK_BEFORE_PREPARE}   -   run before scan all go.sum sub folders at result folder
+# 4   ${GOSUM_HOOK_AFTER_PREPARED}   -   run after scan all go.sum sub folders at result folder
+# 5   ${VENDOR_HOOK_BEFORE_REPLACE}  -   run before replace all folders named as vendor at result folder
+# 6   ${VENDOR_HOOK_AFTER_REPLACE_}  -   run after replace all folders named as vendor at result folder
+# 7   ${GOMOD_HOOK_BEFORE_RENAME_}   -   run before renames all go.mod sub folders at result folder
+# 8   ${GOMOD_HOOK_AFTER_RENAME__}   -   run after renames all go.mod sub folders at result folder
+# 9   ${GOSUM_HOOK_BEFORE_RENAME_}   -   run before renames all go.sum sub folders at result folder
+# 10  ${GOSUM_HOOK_AFTER_RENAME__}   -   run after renames all go.sum sub folders at result folder
+# ---- here generate vendor folder
+# 11  ${GOMOD_HOOK_BEFORE_DELETE_}   -   run before delete go.mod generated at 2 step
+# 12  ${GOMOD_HOOK_AFTER_DELETE__}   -   run after delete go.mod generated at 2 step
+# 13  ${GOSUM_HOOK_BEFORE_DELETE_}   -   run before delete go.sum generated at 4 step
+# 14  ${GOSUM_HOOK_AFTER_DELETE__}   -   run after delete go.sum generated at 4 step
+# 15  ${GOSUM_HOOK_BEFORE_RESTORE}   -   run before restore filename renamed at 10 step
+# 16  ${GOSUM_HOOK_AFTER_RESTORE_}   -   run after restore filename renamed at 10 step
+# 17  ${GOMOD_HOOK_BEFORE_RESTORE}   -   run before restore filename renamed at 8 step
+# 18  ${GOMOD_HOOK_AFTER_RESTORE_}   -   run after restore filename renamed at 8 step
+# 19  ${VENDOR_HOOK_BEFORE_RESTORE}  -   run before replace all vendor folders at 6 step
+# 20  ${VENDOR_HOOK_AFTER_RESTORE_}  -   run after replace all vendor folders at 6 step
+"
+
+while [[ "$#" -gt 0 ]]
+  do
+    case $1 in
+      -h|--help) echo "${help}";exit;shift;;
+    esac
+    shift
+done
 
 # prepare go.mod file
 SOURCE_MODULE=$(echo $CONFIG | jq -r '. | .source_module')
