@@ -8,8 +8,21 @@ CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
+REPOSITORIES=$(echo $CONFIG | jq -r '.repositories[]')
+for REPOSITORY in $REPOSITORIES[@]; do
+  echo $REPOSITORY
+done
+echo $REPOSITORIES
+exit 0
+
+
 # make vendor folder
 $SCRIPT_DIR/make-vendor-folder.sh
+
+
+
+
+
 # SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
 
