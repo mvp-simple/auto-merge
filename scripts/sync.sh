@@ -1,17 +1,15 @@
 #!/bin/bash
 
 # initialization
-SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+SCRIPT_DIR=$(dirname "$0")
+SCRIPT_NAME=$(basename "$0")
 WORK_DIR=$SCRIPT_DIR/../result
 CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
-SCRIPT_NAME=sync.sh
-
-# read configuration
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
-# prepare go.mod and go.sum files
-$SCRIPT_DIR/go.mod.sum.sh
+# make vendor folder
+$SCRIPT_DIR/make-vendor-folder.sh
 # SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
 # GOMOD="module github.com/rinatusmanov

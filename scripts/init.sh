@@ -1,13 +1,11 @@
 #!/bin/bash
 
 # initialization
-SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+SCRIPT_DIR=$(dirname "$0")
+SCRIPT_NAME=$(basename "$0")
 WORK_DIR=$SCRIPT_DIR/../result
 CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
-SCRIPT_NAME=init.sh
-
-# read configuration
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
 # make work folder
