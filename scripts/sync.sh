@@ -8,12 +8,21 @@ CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
+# action declaration
+ACTION_CLEAN_PULL="clean_pull"
+
+# hook declaration
+GIT_CLEAN_PULL_BEFORE="_${ACTION_CLEAN_PULL}_before"
+GIT_CLEAN_PULL_AFTER_="_${ACTION_CLEAN_PULL}_after_"
+
+# clean and pull watched repositories
+${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
 REPOSITORIES=$(echo $CONFIG | jq -r '.repositories[]')
-for REPOSITORY in $REPOSITORIES[@]; do
-  cd "${SCRIPT_DIR}/result/${REPOSITORY}"; git reset --hard; git pull;cd
-  echo $REPOSITORY
+for REPOSITORY in ${REPOSITORIES[@]}; do
+  cd "${SCRIPT_DIR}/../result/${REPOSITORY}"; git clean -fdx && git reset --hard; git pull;
 done
-echo $REPOSITORIES
+${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
+# end clean and pull watched repositories
 exit 0
 
 

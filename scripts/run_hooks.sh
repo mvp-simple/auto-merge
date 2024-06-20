@@ -39,6 +39,8 @@ if [[ "$ACTION" == "" ]]; then
 fi
 
 # find and shell hooks
+[[ -d ${SCRIPT_DIR}/../scripts/hooks/${EXECUTOR} ]] && exit 0
+
 find ${SCRIPT_DIR}/../scripts/hooks/${EXECUTOR} -name "$ACTION*" -print0 | sort -z |
     while IFS= read -r -d '' HOOK; do 
         chmod 0777 "${HOOK}"
