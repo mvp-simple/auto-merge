@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # initialization
-SCRIPT_DIR=$(dirname "$0")
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 SCRIPT_NAME=$(basename "$0")
 WORK_DIR=$SCRIPT_DIR/../result
 CONFIG_DIR=$SCRIPT_DIR/../config
@@ -13,7 +13,6 @@ mkdir $WORK_DIR || echo "" > /dev/null
 
 # initialization git remote
 cd $WORK_DIR
-echo $CONFIG
 GIT_REMOTE=$(echo $CONFIG | jq -r '. | .git.remote')
 git init
 git remote add origin ${GIT_REMOTE}

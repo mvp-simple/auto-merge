@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # initialization
-SCRIPT_DIR=$(dirname "$0")
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 SCRIPT_NAME=$(basename "$0")
 WORK_DIR=$SCRIPT_DIR/../result
 CONFIG_DIR=$SCRIPT_DIR/../config
@@ -11,6 +11,7 @@ CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 # make vendor folder
 $SCRIPT_DIR/make-vendor-folder.sh
 # SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+
 
 # GOMOD="module github.com/rinatusmanov
 
