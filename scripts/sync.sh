@@ -10,6 +10,7 @@ CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
 REPOSITORIES=$(echo $CONFIG | jq -r '.repositories[]')
 for REPOSITORY in $REPOSITORIES[@]; do
+  cd "${SCRIPT_DIR}/result/${REPOSITORY}"; git reset --hard; git pull;cd
   echo $REPOSITORY
 done
 echo $REPOSITORIES
