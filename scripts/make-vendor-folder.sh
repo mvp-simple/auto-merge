@@ -1,4 +1,26 @@
 #!/bin/bash
+# hooks lifecycle
+# 1   GOMOD_HOOK_BEFORE_PREPARE   -   run before scan all go.mod sub folders at result folder
+# 2   GOMOD_HOOK_AFTER_PREPARED   -   run after scan all go.mod sub folders at result folder
+# 3   GOSUM_HOOK_BEFORE_PREPARE   -   run before scan all go.sum sub folders at result folder
+# 4   GOSUM_HOOK_AFTER_PREPARED   -   run after scan all go.sum sub folders at result folder
+# 5   VENDOR_HOOK_BEFORE_REPLACE  -   run before replace all folders named as vendor at result folder
+# 6   VENDOR_HOOK_AFTER_REPLACE_  -   run after replace all folders named as vendor at result folder
+# 7   GOMOD_HOOK_BEFORE_RENAME_   -   run before renames all go.mod sub folders at result folder
+# 8   GOMOD_HOOK_AFTER_RENAME__   -   run after renames all go.mod sub folders at result folder
+# 9   GOSUM_HOOK_BEFORE_RENAME_   -   run before renames all go.sum sub folders at result folder
+# 10  GOSUM_HOOK_AFTER_RENAME__   -   run after renames all go.sum sub folders at result folder
+# ---- here generate vendor folder
+# 11  GOMOD_HOOK_BEFORE_DELETE_   -   run before delete go.mod generated at 2 step
+# 12  GOMOD_HOOK_AFTER_DELETE__   -   run after delete go.mod generated at 2 step
+# 13  GOSUM_HOOK_BEFORE_DELETE_   -   run before delete go.sum generated at 4 step
+# 14  GOSUM_HOOK_AFTER_DELETE__   -   run after delete go.sum generated at 4 step
+# 15  GOSUM_HOOK_BEFORE_RESTORE   -   run before restore filename renamed at 10 step
+# 16  GOSUM_HOOK_AFTER_RESTORE_   -   run after restore filename renamed at 10 step
+# 17  GOMOD_HOOK_BEFORE_RESTORE   -   run before restore filename renamed at 8 step
+# 18  GOMOD_HOOK_AFTER_RESTORE_   -   run after restore filename renamed at 8 step
+# 19  VENDOR_HOOK_BEFORE_RESTORE  -   run before replace all vendor folders at 6 step
+# 20  VENDOR_HOOK_AFTER_RESTORE_  -   run after replace all vendor folders at 6 step
 
 # initialization
 SCRIPT_DIR=$(dirname "$0")
@@ -8,7 +30,6 @@ CONFIG_DIR=$SCRIPT_DIR/../config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 RENAME_SUFFIX="_TEMP_RENAMED"
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
-
 
 # action declaration
 ACTION__GOMOD="gomod"
@@ -25,6 +46,9 @@ GOMOD_HOOK_AFTER_RENAME__="_${ACTION__GOMOD}_after_renamed_"
 GOMOD_HOOK_BEFORE_RESTORE="_${ACTION__GOMOD}_before_restore"
 GOMOD_HOOK_AFTER_RESTORE_="_${ACTION__GOMOD}_after_restore_"
 
+GOMOD_HOOK_BEFORE_DELETE_="_${ACTION__GOMOD}_before_delete_"
+GOMOD_HOOK_AFTER_DELETE__="_${ACTION__GOMOD}_after_delete__"
+
 GOSUM_HOOK_BEFORE_PREPARE="_${ACTION__GOSUM}_before_prepare"
 GOSUM_HOOK_AFTER_PREPARED="_${ACTION__GOSUM}_after_prepared"
 
@@ -33,6 +57,9 @@ GOSUM_HOOK_AFTER_RENAME__="_${ACTION__GOSUM}_after_renamed_"
 
 GOSUM_HOOK_BEFORE_RESTORE="_${ACTION__GOSUM}_before_restore"
 GOSUM_HOOK_AFTER_RESTORE_="_${ACTION__GOSUM}_after_restore_"
+
+GOSUM_HOOK_BEFORE_DELETE_="_${ACTION__GOSUM}_before_delete_"
+GOSUM_HOOK_AFTER_DELETE__="_${ACTION__GOSUM}_after_delete__"
 
 VENDOR_HOOK_BEFORE_REPLACE="_${ACTION_VENDOR}_before_replace"
 VENDOR_HOOK_AFTER_REPLACE_="_${ACTION_VENDOR}_after_replace_"
@@ -54,9 +81,11 @@ do
     GOMOD+="
 "
 done
+RESULT_GO_MOD_FILENAME=$SCRIPT_DIR/../result/go.mod
+touch $RESULT_GO_MOD_FILENAME
+echo $GOMOD > $RESULT_GO_MOD_FILENAME
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_PREPARED}
 # end prepare go.mod file
-
 
 # prepare go.sum file
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_PREPARE}
@@ -68,6 +97,9 @@ do
     GOSUM+="
 "
 done
+RESULT_GO_SUM_FILENAME=$SCRIPT_DIR/../result/go.sum
+touch $RESULT_GO_SUM_FILENAME
+echo $GOMOD > $RESULT_GO_SUM_FILENAME
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_PREPARED}
 # end prepare go.sum file
 
@@ -85,34 +117,35 @@ ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
 # end vendor folder replacing to temp folders
 
 # renaming go.mod files
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RENAME_}
 for FILE in ${GOMOD_FILES[@]}
 do
     mv $FILE $FILE$RENAME_SUFFIX
 done
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RENAME__}
 # end renaming go.mod files
 
 # renaming go.sum files
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RENAME_}
 for FILE in ${GOSUM_FILES[@]}
 do
   mv $FILE $FILE$RENAME_SUFFIX
 done
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RENAME__}
 # end renaming go.sum files
 
+# delete go.mod file
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_DELETE_}
+rm ${RESULT_GO_MOD_FILENAME}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_DELETE__}
+# end delete go.mod file
 
+# delete go.sum file
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_DELETE_}
+rm ${RESULT_GO_SUM_FILENAME}
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_DELETE__}
+# end delete go.sum file
 
-
-# restore go.mod files names
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RESTORE}
-for FILE in ${GOMOD_FILES[@]}
-do
-    mv $FILE$RENAME_SUFFIX $FILE
-done
-${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RESTORE_}
-# end restore go.mod files names
 
 # restore go.sum files names
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RESTORE}
@@ -122,6 +155,15 @@ do
 done
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RESTORE_}
 # end restore go.sum files names
+
+# restore go.mod files names
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RESTORE}
+for FILE in ${GOMOD_FILES[@]}
+do
+    mv $FILE$RENAME_SUFFIX $FILE
+done
+${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RESTORE_}
+# end restore go.mod files names
 
 # vendor folder returning to true position
 ${SCRIPT_DIR}/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_RESTORE}
