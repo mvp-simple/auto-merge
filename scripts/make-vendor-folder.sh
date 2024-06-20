@@ -115,7 +115,7 @@ echo "${GOSUM}" > $RESULT_GO_SUM_FILENAME
 
 # vendor folder replacing to temp folders
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_REPLACE}
-VENDOR_FOLDERS=$(find $SCRIPT_DIR/../result -name "vendor"  -type d)
+VENDOR_FOLDERS=$(find $SCRIPT_DIR/../result -maxdepth 1 -mindepth 1 -name "vendor"  -type d)
 VENDOR_FOLDER_MAP=()
 for VENDOR in "${VENDOR_FOLDERS[@]}"; do
   TEMP_VENDOR=$(mktemp -d)/vendor
@@ -143,7 +143,7 @@ done
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RENAME__}
 # end renaming go.sum files
 
-cd ${SCRIPT_DIR}/../result;ls; go mod tidy; go mod vendor; cd $SCRIPT_DIR
+cd ${SCRIPT_DIR}/../result; go mod tidy; go mod vendor; cd $SCRIPT_DIR
 
 # delete go.mod file
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_DELETE_}

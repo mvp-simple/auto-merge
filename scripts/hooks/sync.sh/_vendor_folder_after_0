@@ -1,0 +1,7 @@
+#!/bin/bash
+SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+$SCRIPT_DIR/../../../scripts/tools/text_replacer.sh -m "*.go" -r 's/github.com\/rinatusmanov\//henry.com\/rinatusmanov\//g'
+$SCRIPT_DIR/../../../scripts/tools/text_replacer.sh -m "go.mod" -r 's/module github.com\/rinatusmanov\//module belik.com\/rinatusmanov\//g'
+$SCRIPT_DIR/../../../scripts/tools/text_replacer.sh -m "go.mod" -r 's/google.golang.org\//belik.org\//g'
+$SCRIPT_DIR/../../../scripts/tools/text_replacer.sh -m "go.sum" -r 's/google.golang.org\//belik.org\//g'
+$SCRIPT_DIR/../../../scripts/tools/text_replacer.sh -m "*.go" -r 's/\"google.golang.org\//\"belik.org\//g'

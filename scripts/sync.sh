@@ -9,25 +9,58 @@ SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 
 # action declaration
-ACTION_CLEAN_PULL="clean_pull"
+ACTION_CLEAN_PULL___="clean_pull"
+ACTION_VENDOR_CREATE="vendor_folder"
 
 # hook declaration
-GIT_CLEAN_PULL_BEFORE="_${ACTION_CLEAN_PULL}_before"
-GIT_CLEAN_PULL_AFTER_="_${ACTION_CLEAN_PULL}_after_"
+GIT_CLEAN_PULL_BEFORE="_${ACTION_CLEAN_PULL___}_before"
+GIT_CLEAN_PULL_AFTER_="_${ACTION_CLEAN_PULL___}_after_"
+VENDOR_CREATE_BEFORE_="_${ACTION_VENDOR_CREATE}_before"
+VENDOR_CREATE_AFTER__="_${ACTION_VENDOR_CREATE}_after_"
 
 # clean and pull watched repositories
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
 REPOSITORIES=$(echo $CONFIG | jq -r '.repositories[]')
 for REPOSITORY in ${REPOSITORIES[@]}; do
   cd "${SCRIPT_DIR}/../result/${REPOSITORY}"; git clean -fdx && git reset --hard; git pull;
+  mv "${SCRIPT_DIR}/../result/${REPOSITORY}/".git "${SCRIPT_DIR}/../result/${REPOSITORY}/".git_last || echo "" > /dev/null
 done
 ${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GIT_CLEAN_PULL_BEFORE}
 # end clean and pull watched repositories
-exit 0
 
 
 # make vendor folder
+${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_CREATE_BEFORE_}
 $SCRIPT_DIR/make-vendor-folder.sh
+${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_CREATE_AFTER__}
+# end make vendor folder
+
+
+rm "${SCRIPT_DIR}/../result/.gitignore" || echo "" > /dev/null
+copy "${SCRIPT_DIR}/../scripts/files/.gitignore_result" "${SCRIPT_DIR}/../scripts/files/.gitignore"
+cd $SCRIPT_DIR/../result; git add -A .; git commit -m "step $(date +%s)"; git push -u origin main;
+
+
+# DIRECTORIES=$(ls -d */)
+# for item in ${DIRECTORIES[@]}
+# do
+#     if [[ $item == "vendor/" ]]; then
+#       continue
+#     fi
+
+#     GOMOD+=$(cat $SCRIPT_DIR/${item}go.mod  | grep -v  'module' | grep -v  'go ')
+#     GOMOD+="
+# "
+#     GOSUM+=$(cat $SCRIPT_DIR/${item}go.sum)
+#     GOSUM+="
+# "
+#     cd $SCRIPT_DIR/$item; git pull
+#     mv $SCRIPT_DIR/${item}go.mod $SCRIPT_DIR/${item}go.mod_last || echo "" > /dev/null
+#     mv $SCRIPT_DIR/${item}go.sum $SCRIPT_DIR/${item}go.sum_last || echo "" > /dev/null
+#     mv $SCRIPT_DIR/${item}.git $SCRIPT_DIR/${item}.git_last || echo "" > /dev/null
+# done
+#cd $SCRIPT_DIR/../result; git add -A .; git commit -m "step $(date +%s)"; git push -u origin main;
+exit 0
 
 
 

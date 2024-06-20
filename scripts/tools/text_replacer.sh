@@ -36,5 +36,5 @@ done
 FILES=$(find $FIND_DIR -name "${MASK}")
 for FILE in ${FILES[@]}
 do
-  sed -i '' $REGEXP $FILE
+  sed -i '' "${REGEXP}" $FILE
 done
