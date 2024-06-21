@@ -89,13 +89,13 @@ Hooks are searched for in the /scripts/hooks/init.sh/ folder
 |---|-------|-----------------------|--------------------------------------------------------------------|
 | 1 | hook  | _clean_pull_before    | runs before all changes in the watched repositories are cleaned up |
 | 2 | logic |                       | clean up all changes in watched repositories                       |
-| 3 | hook  | _clean_pull_after     | runs after clean up all changes in watched repositories            |
+| 3 | hook  | _clean_pull_after_    | runs after clean up all changes in watched repositories            |
 | 4 | hook  | _vendor_folder_before | runs before make-vendor-folder nested component runs               |
 | 5 | logic |                       | run make-vendor-folder nested component                            |
-| 6 | hook  | _vendor_folder_after  | runs after make-vendor-folder nested component runs                |
-| 7 | hook  | _rush_result_before   | runs before pushing final result                                   |
+| 6 | hook  | _vendor_folder_after_ | runs after make-vendor-folder nested component runs                |
+| 7 | hook  | _push_result_before   | runs before pushing final result                                   |
 | 8 | logic |                       | pushing final result                                               |
-| 9 | hook  | _rush_result_after    | runs after pushing final result                                    |
+| 9 | hook  | _push_result_after_   | runs after pushing final result                                    |
 
 Hooks are searched in the folder /scripts/hooks/sync.sh/
 

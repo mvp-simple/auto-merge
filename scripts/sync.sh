@@ -11,7 +11,7 @@ CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
 # action declaration
 ACTION_CLEAN_PULL___="clean_pull"
 ACTION_VENDOR_CREATE="vendor_folder"
-ACTION_PUSH_RESULT__="rush_result"
+ACTION_PUSH_RESULT__="push_result"
 
 # hook declaration
 GIT_CLEAN_PULL_BEFORE="_${ACTION_CLEAN_PULL___}_before"
