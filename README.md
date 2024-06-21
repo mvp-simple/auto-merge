@@ -51,11 +51,11 @@ This tooling also uses git under the hood and provides automation of the creatio
 
 #### Initialization life cycle.
 
-| # | Type  |                  | Explanation                 |
-|---|-------|------------------|-----------------------------|
-| 1 | hook  | _download_before |                             |
-| 2 | logic |                  | loading source repositories |
-| 3 | hook  | _download_after_ |                             |
+| # | Type  |                    | Explanation                 |
+|---|-------|--------------------|-----------------------------|
+| 1 | hook  | `_download_before` |                             |
+| 2 | logic |                    | loading source repositories |
+| 3 | hook  | `_download_after_` |                             |
 
 Hooks are searched for in the /scripts/hooks/init.sh/ folder
 
@@ -85,17 +85,17 @@ Hooks are searched for in the /scripts/hooks/init.sh/ folder
 
 #### Sync lifecycle.
 
-| # | Type  |                       | Explanation                                                        |
-|---|-------|-----------------------|--------------------------------------------------------------------|
-| 1 | hook  | _clean_pull_before    | runs before all changes in the watched repositories are cleaned up |
-| 2 | logic |                       | clean up all changes in watched repositories                       |
-| 3 | hook  | _clean_pull_after_    | runs after clean up all changes in watched repositories            |
-| 4 | hook  | _vendor_folder_before | runs before make-vendor-folder nested component runs               |
-| 5 | logic |                       | run make-vendor-folder nested component                            |
-| 6 | hook  | _vendor_folder_after_ | runs after make-vendor-folder nested component runs                |
-| 7 | hook  | _push_result_before   | runs before pushing final result                                   |
-| 8 | logic |                       | pushing final result                                               |
-| 9 | hook  | _push_result_after_   | runs after pushing final result                                    |
+| # | Type  |                         | Explanation                                                        |
+|---|-------|-------------------------|--------------------------------------------------------------------|
+| 1 | hook  | `_clean_pull_before`    | runs before all changes in the watched repositories are cleaned up |
+| 2 | logic |                         | clean up all changes in watched repositories                       |
+| 3 | hook  | `_clean_pull_after_`    | runs after clean up all changes in watched repositories            |
+| 4 | hook  | `_vendor_folder_before` | runs before make-vendor-folder nested component runs               |
+| 5 | logic |                         | run make-vendor-folder nested component                            |
+| 6 | hook  | `_vendor_folder_after_` | runs after make-vendor-folder nested component runs                |
+| 7 | hook  | `_push_result_before`   | runs before pushing final result                                   |
+| 8 | logic |                         | pushing final result                                               |
+| 9 | hook  | `_push_result_after_`   | runs after pushing final result                                    |
 
 Hooks are searched in the folder /scripts/hooks/sync.sh/
 
@@ -123,26 +123,26 @@ Hooks are searched in the folder /scripts/hooks/sync.sh/
 
 #### Dependency collector lifecycle.
 
-| #  | Type  |                        | Explanation                                                         |
-|----|-------|------------------------|---------------------------------------------------------------------|
-| 1  | hook  | _gomod_before_prepare  | runs before scanning go.mod in all directories of the result folder |
-| 2  | logic |                        | scanning go.mod in all directories of the result folder             |
-| 3  | hook  | _gomod_after_prepared  | runs after scanning go.mod in all directories of the result folder  |
-| 4  | hook  | _gosum_before_prepare  | runs before scanning go.sum in all directories of the result folder |
-| 5  | logic |                        | scanning go.sum in all directories of the result folder             |
-| 6  | hook  | _gosum_after_prepared  | runs after scanning go.sum in all directories of the result folder  |
-| 7  | hook  | _vendor_before_replace | runs before moving vendor folders nested in result folder           |
-| 8  | logic |                        | moving vendor folders nested in result folder                       |
-| 9  | hook  | _vendor_after_replace_ | runs after moving the vendor folders nested in the result folder    |
-| 10 | hook  | _gomod_before_rename_  | runs before renaming go.mod in the result subdirectories            |
-| 11 | logic |                        | renaming go.mod files in the result subdirectories                  |
-| 12 | hook  | _gomod_after_renamed_  | runs after renaming go.mod in the result subdirectories             |
-| 13 | hook  | _gosum_before_rename_  | runs before renaming go.sum in the result subdirectories            |
-| 14 | logic |                        | renaming go.sum files in the result subdirectories                  |
-| 15 | hook  | _gosum_after_renamed_  | runs after renaming go.sum in the result subdirectories             |
-| 16 | hook  | _vendor_before_create  | runs before creating the vendor directory                           |
-| 17 | logic |                        | creating the vendor directory                                       |
-| 18 | hook  | _vendor_after_create_  | runs after creating the vendor directory                            |
+| #  | Type  |                          | Explanation                                                         |
+|----|-------|--------------------------|---------------------------------------------------------------------|
+| 1  | hook  | `_gomod_before_prepare`  | runs before scanning go.mod in all directories of the result folder |
+| 2  | logic |                          | scanning go.mod in all directories of the result folder             |
+| 3  | hook  | `_gomod_after_prepared`  | runs after scanning go.mod in all directories of the result folder  |
+| 4  | hook  | `_gosum_before_prepare`  | runs before scanning go.sum in all directories of the result folder |
+| 5  | logic |                          | scanning go.sum in all directories of the result folder             |
+| 6  | hook  | `_gosum_after_prepared`  | runs after scanning go.sum in all directories of the result folder  |
+| 7  | hook  | `_vendor_before_replace` | runs before moving vendor folders nested in result folder           |
+| 8  | logic |                          | moving vendor folders nested in result folder                       |
+| 9  | hook  | `_vendor_after_replace_` | runs after moving the vendor folders nested in the result folder    |
+| 10 | hook  | `_gomod_before_rename_`  | runs before renaming go.mod in the result subdirectories            |
+| 11 | logic |                          | renaming go.mod files in the result subdirectories                  |
+| 12 | hook  | `_gomod_after_renamed_`  | runs after renaming go.mod in the result subdirectories             |
+| 13 | hook  | `_gosum_before_rename_`  | runs before renaming go.sum in the result subdirectories            |
+| 14 | logic |                          | renaming go.sum files in the result subdirectories                  |
+| 15 | hook  | `_gosum_after_renamed_`  | runs after renaming go.sum in the result subdirectories             |
+| 16 | hook  | `_vendor_before_create`  | runs before creating the vendor directory                           |
+| 17 | logic |                          | creating the vendor directory                                       |
+| 18 | hook  | `_vendor_after_create_`  | runs after creating the vendor directory                            |
 
 Hooks are searched for in the folder /scripts/hooks/make-vendor-folder.sh/
 
@@ -172,13 +172,13 @@ If several hooks are found, they are executed in alphabetical order.
 
 The name of the hook files must begin with the name of the hook
 
-For example, synchronization has a hook _rush_result_before, so in the folder /scripts/hooks/sync.sh/ when the event _
-rush_result_before is called, all files starting with _rush_result_before will be searched
+For example, synchronization has a hook _rush_result_before, so in the folder /scripts/hooks/sync.sh/ when the event `_
+push_result_before` is called, all files starting with **_push_result_before** will be searched
 
-Example of a hook
+Example of a hook /scripts/hooks/sync.sh/_push_result_before_hello
 
 ```bash
 #!/bin/bash
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
-echo "Hello i am a hook _rush_result_before"
+echo "Hello i am a hook _push_result_before"
 ```
