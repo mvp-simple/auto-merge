@@ -1,6 +1,2 @@
 .idea
-*/.git
-*/vendor
-*/.gitignore
-*/.git_last
 result

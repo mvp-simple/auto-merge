@@ -3,7 +3,7 @@
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 SCRIPT_NAME=$(basename "$0")
 WORK_DIR=$SCRIPT_DIR/../result
-CONFIG_DIR=$SCRIPT_DIR/../config
+CONFIG_DIR=$SCRIPT_DIR/../scripts/config
 SCRIPTS_DIR=$SCRIPT_DIR/../scripts
 RENAME_SUFFIX="_TEMP_RENAMED"
 CONFIG=$(cat $CONFIG_DIR/$SCRIPT_NAME.json)
@@ -83,7 +83,7 @@ SOURCE_GO_VERSION=$(echo $CONFIG | jq -r '. | .source_go_version')
 GOMOD="module ${SOURCE_MODULE}
 go ${SOURCE_GO_VERSION}
 "
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_PREPARE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_PREPARE}
 GOMOD_FILES=$(find $SCRIPT_DIR/../result/*/ -type d -name /vendor -prune -o -name 'go.mod')
 for FILE in ${GOMOD_FILES[@]}
 do
@@ -94,11 +94,11 @@ done
 RESULT_GO_MOD_FILENAME="${SCRIPT_DIR}"/../result/go.mod
 touch $RESULT_GO_MOD_FILENAME
 echo "${GOMOD}" > $RESULT_GO_MOD_FILENAME
-"${SCRIPT_DIR}"/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_PREPARED}
+"${SCRIPT_DIR}"/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_PREPARED}
 # end prepare go.mod file
 
 # prepare go.sum file
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_PREPARE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_PREPARE}
 GOSUM=""
 GOSUM_FILES=$(find $SCRIPT_DIR/../result/*/ -type d -name /vendor -prune -o -name 'go.sum')
 for FILE in ${GOSUM_FILES[@]}
@@ -110,11 +110,11 @@ done
 RESULT_GO_SUM_FILENAME="${SCRIPT_DIR}"/../result/go.sum
 touch $RESULT_GO_SUM_FILENAME
 echo "${GOSUM}" > $RESULT_GO_SUM_FILENAME
-"${SCRIPT_DIR}"/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_PREPARED}
+"${SCRIPT_DIR}"/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_PREPARED}
 # end prepare go.sum file
 
 # vendor folder replacing to temp folders
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_REPLACE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_REPLACE}
 VENDOR_FOLDERS=$(find $SCRIPT_DIR/../result -maxdepth 1 -mindepth 1 -name "vendor"  -type d)
 VENDOR_FOLDER_MAP=()
 for VENDOR in "${VENDOR_FOLDERS[@]}"; do
@@ -122,68 +122,68 @@ for VENDOR in "${VENDOR_FOLDERS[@]}"; do
   VENDOR_FOLDER_MAP+=("${TEMP_VENDOR}"="${VENDOR}")
   mv $VENDOR $TEMP_VENDOR
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_REPLACE_}
 # end vendor folder replacing to temp folders
 
 # renaming go.mod files
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RENAME_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RENAME_}
 for FILE in ${GOMOD_FILES[@]}
 do
     mv $FILE $FILE$RENAME_SUFFIX
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RENAME__}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RENAME__}
 # end renaming go.mod files
 
 # renaming go.sum files
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RENAME_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RENAME_}
 for FILE in ${GOSUM_FILES[@]}
 do
   mv $FILE $FILE$RENAME_SUFFIX
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RENAME__}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RENAME__}
 # end renaming go.sum files
 
 cd ${SCRIPT_DIR}/../result; go mod tidy; go mod vendor; cd $SCRIPT_DIR
 
 # delete go.mod file
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_DELETE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_DELETE_}
 rm ${RESULT_GO_MOD_FILENAME}
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_DELETE__}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_DELETE__}
 # end delete go.mod file
 
 # delete go.sum file
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_DELETE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_DELETE_}
 rm ${RESULT_GO_SUM_FILENAME}
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_DELETE__}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_DELETE__}
 # end delete go.sum file
 
 
 # restore go.sum files names
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RESTORE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_BEFORE_RESTORE}
 for FILE in ${GOSUM_FILES[@]}
 do
     mv $FILE$RENAME_SUFFIX $FILE
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RESTORE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOSUM_HOOK_AFTER_RESTORE_}
 # end restore go.sum files names
 
 # restore go.mod files names
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RESTORE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_BEFORE_RESTORE}
 for FILE in ${GOMOD_FILES[@]}
 do
     mv $FILE$RENAME_SUFFIX $FILE
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RESTORE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${GOMOD_HOOK_AFTER_RESTORE_}
 # end restore go.mod files names
 
 # vendor folder returning to true position
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_RESTORE}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_BEFORE_RESTORE}
 for VENDOR in "${VENDOR_FOLDER_MAP[@]}"; do
   TEMP_VENDOR=$(cut -d "=" -f 1 <<< "$VENDOR")
   TRUE_FOLDER=$(cut -d "=" -f 2 <<< "$VENDOR")
   mv $TEMP_VENDOR $TRUE_FOLDER
 done
-${SCRIPT_DIR}/../scripts/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_RESTORE_}
+${SCRIPT_DIR}/../scripts/hooks/run_hooks.sh -e ${SCRIPT_NAME} -a ${VENDOR_HOOK_AFTER_RESTORE_}
 # end vendor folder returning to true position
 
 
