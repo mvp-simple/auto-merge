@@ -7,3 +7,5 @@ cd $SCRIPT_DIR
 git add -A .
 git commit -m "step $(date +%s)"
 git push -u origin main --force
+
+
