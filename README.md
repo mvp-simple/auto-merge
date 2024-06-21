@@ -1,7 +1,5 @@
 ## Synchrophasotron golang 0.0.1
 
-[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-
 ### Problems.
 
 When developing code by multiple teams in one subject area, non-linear development occurs in its various
