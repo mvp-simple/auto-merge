@@ -33,14 +33,14 @@ This tooling also uses git under the hood and provides automation of the creatio
 
 ```json
 {
-"git": {
-"remote": "git@github.com:mvp-simple/auto-merge-result.git"
-},
-"repositories": {
-"dauni-ml": "https://github.com/rinatusmanov/dauni-ml.git",
-"gg/dauni-ml": "https://github.com/rinatusmanov/dauni-ml.git",
-"jsonrpc20": "https://github.com/rinatusmanov/evgeniya.git"
-}
+    "git": {
+    "remote": "git@github.com:mvp-simple/auto-merge-result.git"
+    },
+    "repositories": {
+        "dauni-ml": "https://github.com/rinatusmanov/dauni-ml.git",
+        "gg/dauni-ml": "https://github.com/rinatusmanov/dauni-ml.git",
+        "jsonrpc20": "https://github.com/rinatusmanov/evgeniya.git"
+    }
 }
 ```
 
@@ -71,11 +71,11 @@ Hooks are searched for in the /scripts/hooks/init.sh/ folder
 
 ```json
 {
-"repositories": [
-"dauni-ml",
-"gg/dauni-ml",
-"jsonrpc20"
-]
+    "repositories": [
+    "dauni-ml",
+    "gg/dauni-ml",
+    "jsonrpc20"
+    ]
 }
 ```
 
@@ -111,8 +111,8 @@ Hooks are searched in the folder /scripts/hooks/sync.sh/
 
 ```json
 {
-"source_module": "github.com/rinatusmanov",
-"source_go_version": "1.18"
+    "source_module": "github.com/rinatusmanov",
+    "source_go_version": "1.18"
 }
 ```
 
